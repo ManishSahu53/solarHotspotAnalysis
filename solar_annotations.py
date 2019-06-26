@@ -24,26 +24,37 @@ def get_list(path, shapes):
     data = (path + ' ' + ''.join([str(a) for a in bbox]))
     return data[:-1]
 
+def getListOfFiles(path):
+    # create a list of file and sub directories 
+    # names in the given directory 
+    listOfFile = os.listdir(path)
+    allFiles = list()
+    # Iterate over all the entries
+    for entry in listOfFile:
+        # Create full path
+        fullPath = os.path.join(path, entry)
+        # If entry is a directory then get the list of files in this directory 
+        if os.path.isdir(fullPath):
+            allFiles = allFiles + getListOfFiles(fullPath)
+        else:
+            allFiles.append(fullPath)
+                
+    return allFiles   
 
 # Main functions
 def main():
-    for root, dirs, files in os.walk(path_input):
-        list_file = open(path_output, 'w')
-        if len(files) < 1:
-            print('No file found. Exiting..')
-            sys.exit()
+    files = getListOfFiles(path_input)
+    list_file = open(path_output, 'w')
+    for file in files:
+        if file.endswith('.json'):
+            path_image = os.path.splitext(file)[0] + '.jpg'
+            json_data = json.load(open(file))
+            shapes = json_data['shapes']
+            data = get_list(path_image, shapes)
         else:
-            print('Found %s images' % (len(files)))
-            for file in files:
-                if file.endswith('.json'):
-                    path_image = os.path.splitext(file)[0] + '.jpg'
-                    json_data = json.load(open(os.path.join(root, file)))
-                    shapes = json_data['shapes']
-                    data = get_list(os.path.join(root, path_image), shapes)
-                else:
-                    continue
-                list_file.write(data)
-                list_file.write('\n')
+            continue
+        list_file.write(data)
+        list_file.write('\n')
     list_file.close()
 
 
