@@ -12,6 +12,7 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, Ear
 
 from yolo3.model import preprocess_true_boxes, yolo_body, tiny_yolo_body, yolo_loss
 from yolo3.utils import get_random_data
+import config
 
 
 def get_classes(path_classes):
@@ -31,7 +32,7 @@ def get_anchors(path_anchors):
 
 
 def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
-                 weights_path='model_data/yolo_weights.h5'):
+                 weights_path=config.WEIGHTS):
     '''create the training model'''
     K.clear_session()  # get a new session
     image_input = Input(shape=(None, None, 3))
@@ -65,7 +66,7 @@ def create_model(input_shape, anchors, num_classes, load_pretrained=True, freeze
 
 
 def create_tiny_model(input_shape, anchors, num_classes, load_pretrained=True, freeze_body=2,
-                      weights_path='model_data/tiny_yolo_weights.h5'):
+                      weights_path=config.TINY_WEIGHTS):
     '''create the training model, for Tiny YOLOv3'''
     K.clear_session()  # get a new session
     image_input = Input(shape=(None, None, 3))
@@ -136,20 +137,22 @@ def _main():
 
     parser.add_argument('-c', '--classes',
                         help='Input file containing classes',
-                        required=True)
+                        default=config.CLASSES,
+                        required=False)
 
     parser.add_argument('-a', '--anchor',
                         help='Input file containing anchors',
-                        required=True)
+                        default=config.ANCHORS,
+                        required=False)
 
     parser.add_argument('-s', '--size', type=int,
                         help='Input file size. [Default] - 416x416',
-                        default=416,
+                        default=config.IMAGE_SIZE,
                         required=False)
 
     parser.add_argument('-o', '--output',
                         help='output txt file. [Default] - Annotation.txt',
-                        default='annotation.txt',
+                        default=config.ANNOTATATIONS,
                         required=False)
 
     parser.add_argument('-e', '--epoch', type=int,
@@ -166,7 +169,7 @@ def _main():
     args = parser.parse_args()
 
     path_annotation = args.data
-    log_dir = 'logs/000/'
+    log_dir = config.LOGS
     path_classes = args.classes
     path_anchors = args.anchor
     size = args.size
@@ -190,10 +193,10 @@ def _main():
     is_tiny_version = len(anchors) == 6  # default setting
     if is_tiny_version:
         model = create_tiny_model(input_shape, anchors, num_classes,
-                                  freeze_body=2, weights_path='model_data/tiny_yolo_weights.h5')
+                                  freeze_body=2, weights_path=config.TINY_WEIGHTS)
     else:
         model = create_model(input_shape, anchors, num_classes,
-                             freeze_body=2, weights_path='model_data/yolo_weights.h5')  # make sure you know what you freeze
+                             freeze_body=2, weights_path=config.WEIGHTS)  # make sure you know what you freeze
 
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
@@ -219,7 +222,7 @@ def _main():
             # use custom yolo_loss Lambda layer.
             'yolo_loss': lambda y_true, y_pred: y_pred})
 
-        tune_batch_size = batch_size*8
+        tune_batch_size = batch_size
         print('Train on {} samples, val on {} samples, with batch size {}.'.format(
             num_train, num_val, tune_batch_size))
         model.fit_generator(data_generator_wrapper(lines[:num_train], tune_batch_size, input_shape, anchors, num_classes),

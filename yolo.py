@@ -17,17 +17,19 @@ from yolo3.model import yolo_eval, yolo_body, tiny_yolo_body, yolo_head, yolo_lo
 from yolo3.utils import letterbox_image
 import os
 from keras.utils import multi_gpu_model
+import pandas as pd
+import config
 
 
 class YOLO(object):
     _defaults = {
-        "model_path": 'model_data/yolo.h5',
-        "anchors_path": 'model_data/yolo_anchors.txt',
-        "classes_path": 'model_data/thermal_classes.txt',
-        "score": 0.3,
-        "iou": 0.45,
-        "model_image_size": (416, 416),
-        "gpu_num": 1,
+        "model_path": config.WEIGHTS,
+        "anchors_path": config.ANCHORS,
+        "classes_path": config.CLASSES,
+        "score": config.SCORE,
+        "iou": config.IOU,
+        "model_image_size": (config.IMAGE_SIZE, config.IMAGE_SIZE),
+        "gpu_num": config.NUM_GPU,
     }
 
     @classmethod
@@ -137,7 +139,12 @@ class YOLO(object):
         font = ImageFont.truetype(font='font/FiraMono-Medium.otf',
                                   size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
         thickness = (image.size[0] + image.size[1]) // 300
-
+        LEFT = []
+        RIGHT = []
+        TOP = []
+        BOTTOM = []
+        LABEL = []
+        
         for i, c in reversed(list(enumerate(out_classes))):
             predicted_class = self.class_names[c]
             box = out_boxes[i]
@@ -153,6 +160,11 @@ class YOLO(object):
             bottom = min(image.size[1], np.floor(bottom + 0.5).astype('int32'))
             right = min(image.size[0], np.floor(right + 0.5).astype('int32'))
             # print(label, (left, top), (right, bottom))
+            TOP.append(top)
+            BOTTOM.append(bottom)
+            LEFT.append(left)
+            RIGHT.append(right)
+            LABEL.append(label)
 
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
@@ -171,8 +183,15 @@ class YOLO(object):
             del draw
 
         end = timer()
+        data = pd.DataFrame()
+        data['top'] = TOP
+        data['bottom'] = BOTTOM
+        data['left'] = LEFT
+        data['right'] = RIGHT
+        data['label'] = LABEL
+
         # print(end - start)
-        return image
+        return image, data
 
     def close_session(self):
         self.sess.close()

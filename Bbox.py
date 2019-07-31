@@ -39,13 +39,13 @@ def detect_img(yolo):
                     else:
                         r_image, data = yolo.detect_image(
                             image)
-                        try:
-                        #data.to_csv(os.path.join(path_output, name + '.csv'), index=False)            
-                            r_image.save(os.path.join(
-                                path_output, name + '_predict.png'), 'PNG')
-                        except:
-                            print('Error saving to %s' % (os.path.join(
-                                path_output, name + '_predict.png')))
+                        # try:
+                        data.to_csv(os.path.join(path_output, name + '.csv'), index=False)            
+                        #     r_image.save(os.path.join(
+                        #         path_output, name + '_predict.png'), 'PNG')
+                        # except:
+                        #     print('Error saving to %s' % (os.path.join(
+                        #         path_output, name + '_predict.png')))
         yolo.close_session()
 
     else:

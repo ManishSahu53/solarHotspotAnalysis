@@ -11,21 +11,22 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, Ear
 
 from yolo3.model import preprocess_true_boxes, yolo_body, tiny_yolo_body, yolo_loss
 from yolo3.utils import get_random_data
-
+import config
 
 def _main():
-    annotation_path = 'train.txt'
-    log_dir = 'logs/000/'
-    classes_path = 'model_data/coco_classes.txt'
-    anchors_path = 'model_data/yolo_anchors.txt'
+    annotation_path = config.ANNOTATATIONS
+    log_dir = config.LOGS
+    classes_path = config.CLASSES
+    anchors_path = config.ANCHORS
     class_names = get_classes(classes_path)
     num_classes = len(class_names)
     anchors = get_anchors(anchors_path)
 
-    input_shape = (416, 416)  # multiple of 32, hw
+    input_shape = (config.IMAGE_SIZE, config.IMAGE_SIZE)  # multiple of 32, hw
+    weights_path = config.WEIGHTS
 
     model, bottleneck_model, last_layer_model = create_model(input_shape, anchors, num_classes,
-                                                             freeze_body=2, weights_path='model_data/yolo_weights.h5')  # make sure you know what you freeze
+                                                             freeze_body=2, weights_path=weights_path)  # make sure you know what you freeze
 
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
@@ -77,7 +78,7 @@ def _main():
                                            lines[num_train:], batch_size, input_shape, anchors, num_classes, bottlenecks_val),
                                        validation_steps=max(
                                            1, num_val//batch_size),
-                                       epochs=30,
+                                       epochs=config.EPOCH,
                                        initial_epoch=0, max_queue_size=1)
         model.save_weights(log_dir + 'trained_weights_stage_0.h5')
 
