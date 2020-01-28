@@ -1,4 +1,10 @@
+# Folders
 /data
 /logs
-*.ipynb
+/objectDetection/logs/*
 
+# Files
+*.ipynb
+*.h5
+*.pyc
+*.weights

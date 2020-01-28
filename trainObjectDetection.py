@@ -10,9 +10,8 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
 
-from yolo3.model import preprocess_true_boxes, yolo_body, tiny_yolo_body, yolo_loss
-from yolo3.utils import get_random_data
-import config
+from objectDetection.yolo3.model import preprocess_true_boxes, yolo_body, tiny_yolo_body, yolo_loss
+from objectDetection.yolo3.utils import get_random_data
 
 
 def get_classes(path_classes):
@@ -150,11 +149,6 @@ def _main():
                         default=config.IMAGE_SIZE,
                         required=False)
 
-    parser.add_argument('-o', '--output',
-                        help='output txt file. [Default] - Annotation.txt',
-                        default=config.ANNOTATATIONS,
-                        required=False)
-
     parser.add_argument('-e', '--epoch', type=int,
                         help='Enter number of epochs for training. [Default] 10',
                         default=10,
@@ -165,12 +159,17 @@ def _main():
                         default=4,
                         required=False)
 
+    parser.add_argument('-w', '--weight', type=str,
+                        help='Path of pretrained weight file of yolov3.',
+                        required=True)
+            
     # Parsing arguments
     args = parser.parse_args()
 
     path_annotation = args.data
     log_dir = config.LOGS
     path_classes = args.classes
+    path_weight = args.weight
     path_anchors = args.anchor
     size = args.size
     class_names = get_classes(path_classes)
@@ -193,10 +192,10 @@ def _main():
     is_tiny_version = len(anchors) == 6  # default setting
     if is_tiny_version:
         model = create_tiny_model(input_shape, anchors, num_classes,
-                                  freeze_body=2, weights_path=config.TINY_WEIGHTS)
+                                  freeze_body=2, weights_path=path_weight)
     else:
         model = create_model(input_shape, anchors, num_classes,
-                             freeze_body=2, weights_path=config.WEIGHTS)  # make sure you know what you freeze
+                             freeze_body=2, weights_path=path_weight)  # make sure you know what you freeze
 
     logging = TensorBoard(log_dir=log_dir)
     checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
