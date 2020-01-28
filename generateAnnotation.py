@@ -48,9 +48,13 @@ def main():
     for file in files:
         if file.endswith('.json'):
             path_image = os.path.splitext(file)[0] + '.jpg'
-            json_data = json.load(open(file))
-            shapes = json_data['shapes']
-            data = get_list(path_image, shapes)
+        
+            if not os.path.isfile(path_image):
+                print('File {} not found'.format(path_image))
+            else:
+                json_data = json.load(open(file))
+                shapes = json_data['shapes']
+                data = get_list(path_image, shapes)
         else:
             continue
         list_file.write(data)
