@@ -35,6 +35,29 @@ Uses pretrained weights to make predictions on images. Below table displays the 
 
     $ python3 detect.py --image_folder data/samples/
 
+Sample output in JSON with temperature, BoundingBox and area of defect
+```
+    "data/solar/test/RJPG/DJI_0004_R.JPG": [
+        {
+            "class": "0.0",
+            "class_confidence": "1.0",
+            "bbox": [
+                "446",
+                "279",
+                "458",
+                "293"
+            ],
+            "stats": {
+                "min": 34.1401879967774,
+                "max": 46.0524921261304,
+                "mean": 37.3142733195741,
+                "median": 36.09978280042708,
+                "area": 168
+            }
+        }
+    ],
+```
+
 <p align="center"><img src="assets/DJI_0002_R.png" width="480"\></p>
 <p align="center"><img src="assets/DJI_0004_R.png" width="480"\></p>
 <p align="center"><img src="assets/DJI_0006_R.png" width="480"\></p>
