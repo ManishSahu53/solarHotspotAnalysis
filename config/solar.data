@@ -1,0 +1,4 @@
+classes= 1
+train=data/solar/train.txt
+valid=data/solar/valid.txt
+names=data/solar/classes.names
