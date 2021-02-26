@@ -1,4 +1,4 @@
-# PyTorch-YOLOv3
+# Solar Hotspot Automatic analysis
 A minimal PyTorch implementation of YOLOv3, to detech solar hotpots automatically and report its area, temperature of defects
 
 ## Installation
