@@ -30,7 +30,7 @@ path_output = 'output/'
 
 # Model Files
 WEB_PATH_MODEL = 'https://github.com/ManishSahu53/solarHotspotAnalysis/releases/download/1.1/yolov3_ckpt_49.pth'
-PATH_MODEL = './weights/yolov3_ckpt_49.pth'
+PATH_MODEL = '~/weights/yolov3_ckpt_49.pth'
 PATH_README = 'https://githubraw.com/ManishSahu53/solarHotspotAnalysis/1.1/README.md'
 PATH_DEMO_IMAGE = './sample_data/test/RJPG/'
 
@@ -48,7 +48,7 @@ st.set_page_config(page_title="Solar HotSpot Analysis Tool", page_icon=":beer:",
                 
 st.sidebar.warning('Upload an JPG or RJPG Image. For best results.')
 
-util.check_dir('./weights')
+util.check_dir('~/weights')
 f_checkpoint = Path(PATH_MODEL)
 if not f_checkpoint.exists():
     with st.spinner("Downloading model weights... this may take up to a few minutes. (~250 MB) Please don't interrupt it."):
