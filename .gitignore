@@ -2,8 +2,10 @@
 /data
 /logs
 /objectDetection/logs/*
+/weights
 
 # Files
+*.pth
 *.ipynb
 *.h5
 *.pyc
