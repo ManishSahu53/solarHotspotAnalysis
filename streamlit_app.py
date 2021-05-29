@@ -29,7 +29,7 @@ img_size = 416
 path_output = 'output/'
 
 # Model Files
-WEB_PATH_MODEL = 'https://githubraw.com/ManishSahu53/solarHotspotAnalysis/releases/download/1.1/yolov3_ckpt_49.pth'
+WEB_PATH_MODEL = 'https://github.com/ManishSahu53/solarHotspotAnalysis/releases/download/1.1/yolov3_ckpt_49.pth'
 PATH_MODEL = './weights/yolov3_ckpt_49.pth'
 PATH_README = 'https://githubraw.com/ManishSahu53/solarHotspotAnalysis/1.1/README.md'
 PATH_DEMO_IMAGE = './sample_data/test/RJPG/'
