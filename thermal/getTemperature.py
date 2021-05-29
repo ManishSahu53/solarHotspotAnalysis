@@ -20,7 +20,7 @@ def getStas(tempArray, bbox):
         'max': 0,
         'mean': 0,
         'median': 0,
-        'area': 0
+        'area(inPixels)': 0
     }
 
     hissa = tempArray[bbox[1]: bbox[3], bbox[0]: bbox[2]]
@@ -28,5 +28,5 @@ def getStas(tempArray, bbox):
     stats['max'] = np.max(hissa)
     stats['mean'] = np.mean(hissa)
     stats['median'] = np.median(hissa)
-    stats['area'] = (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
+    stats['area(inPixels)'] = (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
     return stats

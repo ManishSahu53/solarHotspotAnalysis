@@ -10,30 +10,12 @@ Credit to Original Repo - https://github.com/eriklindernoren/PyTorch-YOLOv3
     $ sudo pip3 install -r requirements.txt
 
 ##### Download pretrained weights
-    $ cd weights/
-    $ bash download_weights.sh
-
-##### Download COCO
-    $ cd data/
-    $ bash get_coco_dataset.sh
+    $ Check the Google Drive link in Issue page in Github
     
-## Test
-Evaluates the model on COCO test.
-
-    $ python3 test.py --weights_path weights/yolov3.weights
-
-| Model                   | mAP (min. 50 IoU) |
-| ----------------------- |:-----------------:|
-| YOLOv3 608 (paper)      | 57.9              |
-| YOLOv3 608 (this impl.) | 57.3              |
-| YOLOv3 416 (paper)      | 55.3              |
-| YOLOv3 416 (this impl.) | 55.5              |
-
 ## Inference
 Uses pretrained weights to make predictions on images. Below table displays the inference times when using as inputs images scaled to 256x256. The ResNet backbone measurements are taken from the YOLOv3 paper. The Darknet-53 measurement marked shows the inference time of this implementation on my 1080ti card.
 
-
-    $ python3 detect.py --image_folder data/samples/
+    $ python detect.py --image_folder sample_data/test/RJPG --model_def config/yolov3-solar.cfg --weights_path weights/yolov3_ckpt_49.pth --class_path sample_data/classes.names
 
 Sample output in JSON with temperature, BoundingBox and area of defect
 ```
@@ -80,41 +62,6 @@ $ train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
 To train on COCO using a Darknet-53 backend pretrained on ImageNet run: 
 ```
 $ python3 train.py --data_config config/coco.data  --pretrained_weights weights/darknet53.conv.74
-```
-
-#### Training log
-```
----- [Epoch 7/100, Batch 7300/14658] ----
-+------------+--------------+--------------+--------------+
-| Metrics    | YOLO Layer 0 | YOLO Layer 1 | YOLO Layer 2 |
-+------------+--------------+--------------+--------------+
-| grid_size  | 16           | 32           | 64           |
-| loss       | 1.554926     | 1.446884     | 1.427585     |
-| x          | 0.028157     | 0.044483     | 0.051159     |
-| y          | 0.040524     | 0.035687     | 0.046307     |
-| w          | 0.078980     | 0.066310     | 0.027984     |
-| h          | 0.133414     | 0.094540     | 0.037121     |
-| conf       | 1.234448     | 1.165665     | 1.223495     |
-| cls        | 0.039402     | 0.040198     | 0.041520     |
-| cls_acc    | 44.44%       | 43.59%       | 32.50%       |
-| recall50   | 0.361111     | 0.384615     | 0.300000     |
-| recall75   | 0.222222     | 0.282051     | 0.300000     |
-| precision  | 0.520000     | 0.300000     | 0.070175     |
-| conf_obj   | 0.599058     | 0.622685     | 0.651472     |
-| conf_noobj | 0.003778     | 0.004039     | 0.004044     |
-+------------+--------------+--------------+--------------+
-Total Loss 4.429395
----- ETA 0:35:48.821929
-```
-
-#### Tensorboard
-Track training progress in Tensorboard:
-* Initialize training
-* Run the command below
-* Go to http://localhost:6006/
-
-```
-$ tensorboard --logdir='logs' --port=6006
 ```
 
 ## Train on Custom Dataset
