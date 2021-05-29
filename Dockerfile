@@ -17,4 +17,4 @@ COPY . /app
 WORKDIR /app
 
 # run it!
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0", "--logger.level=error"]
+ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8080", "--server.address=0.0.0.0", "--logger.level=error"]
