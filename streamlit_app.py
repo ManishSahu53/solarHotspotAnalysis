@@ -24,7 +24,7 @@ class_path = './sample_data/classes.names'
 conf_thres = 0.8
 nms_thres = 0.2
 batch_size = 1
-n_cpu = 0
+n_cpu = 1
 img_size = 416
 path_output = 'output/'
 
