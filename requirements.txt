@@ -2,7 +2,7 @@ streamlit
 pillow
 numpy
 matplotlib
-https://download.pytorch.org/whl/cpu/torch-1.8.1%2Bcpu-cp39-cp39-linux_x86_64.whl
+https://download.pytorch.org/whl/cpu/torch-1.8.0%2Bcpu-cp39-cp39-linux_x86_64.whl
 https://download.pytorch.org/whl/cpu/torchvision-0.9.0%2Bcpu-cp39-cp39-linux_x86_64.whl
 pillow
 tqdm
